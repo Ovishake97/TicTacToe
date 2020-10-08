@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace TicTacToe
@@ -8,19 +9,23 @@ namespace TicTacToe
         static void Main(string[] args)
         {
             TicTacToeGame ticTacToeGame = new TicTacToeGame();
-            char[] board = ticTacToeGame.CreateBoard();
-            char computerMove= ticTacToeGame.SelectMove();
-            ticTacToeGame.ShowBoard();
+            char[] boardMoves = ticTacToeGame.CreateBoard();
+            char playerMove= ticTacToeGame.SelectMove();
+            ticTacToeGame.ShowBoard(boardMoves);
+            ticTacToeGame.FillPosition(playerMove);
+            ticTacToeGame.ShowBoard(boardMoves);
         }
     }
 
     public class TicTacToeGame
     {
+        public char[] board = new char[10];
+        public char userMove= ' ';
+        char cpuMove = ' ';
         public char[] CreateBoard()
         {
-            char[] board = new char[10];
-            for (int i = 0; i < board.Length; i++) {
-                board[i] = ' ';
+            for (int i = 1; i <= board.Length; i++) {
+                board[i] =' ';
             }
             return board;
         }
@@ -31,9 +36,9 @@ namespace TicTacToe
         /// <returns></returns>
         public char SelectMove()
         {
-            char cpuMove= ' ';
+            
             Console.WriteLine("Select your move X or O");
-            char userMove = Convert.ToChar(Console.ReadLine().ToUpper());
+            userMove = Convert.ToChar(Console.ReadLine().ToUpper());
             if (userMove == 'X')
             {
                 cpuMove = 'O';
@@ -45,15 +50,30 @@ namespace TicTacToe
             else {
                 Console.WriteLine("Invalid move");
             }
-            return cpuMove;
+            return userMove;
         }
 
-        public void ShowBoard() {
-            Console.WriteLine("___||___||___");
-            Console.WriteLine("___||___||___");
-            Console.WriteLine("___||___||___");
+        public void ShowBoard(char[] board) {
+            Console.WriteLine("___|___|___");
+            Console.WriteLine("_ "+board[1]+" | " +board[2]+ " | " +board[3]);
+            Console.WriteLine("___|___|___");
+            Console.WriteLine("_ " + board[4] + " | " + board[5] + " | " + board[6]);
+            Console.WriteLine("___|___|___");
+            Console.WriteLine("_ " + board[7] + " | " + board[8] + " | " + board[9]);
         }
 
+        public void FillPosition(char userMove) {
+            Console.WriteLine("Choose your desired index");
+            int index = Convert.ToInt32((Console.ReadLine()));
+            if (board[index] == ' ')
+            {
+                board[index] = userMove;
+            }
+            else {
+                Console.WriteLine("Position is already filled");
+            }
+            
+        }
     }
 }
 
