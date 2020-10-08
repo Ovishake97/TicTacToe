@@ -12,7 +12,7 @@ namespace TicTacToe
             char[] boardMoves = ticTacToeGame.CreateBoard();
             char playerMove= ticTacToeGame.SelectMove();
             ticTacToeGame.ShowBoard(boardMoves);
-            ticTacToeGame.FillPosition(playerMove);
+           boardMoves= ticTacToeGame.FillPosition(boardMoves,playerMove);
             ticTacToeGame.ShowBoard(boardMoves);
         }
     }
@@ -25,7 +25,9 @@ namespace TicTacToe
         public char[] CreateBoard()
         {
             for (int i = 1; i <= board.Length; i++) {
-                board[i] =' ';
+
+                
+                board[i-1] =' ';
             }
             return board;
         }
@@ -55,14 +57,14 @@ namespace TicTacToe
 
         public void ShowBoard(char[] board) {
             Console.WriteLine("___|___|___");
-            Console.WriteLine("_ "+board[1]+" | " +board[2]+ " | " +board[3]);
+            Console.WriteLine(" "+board[1]+" | " +board[2]+ " | " +board[3]);
             Console.WriteLine("___|___|___");
-            Console.WriteLine("_ " + board[4] + " | " + board[5] + " | " + board[6]);
+            Console.WriteLine(" " + board[4] + " | " + board[5] + " | " + board[6]);
             Console.WriteLine("___|___|___");
-            Console.WriteLine("_ " + board[7] + " | " + board[8] + " | " + board[9]);
+            Console.WriteLine(" " + board[7] + " | " + board[8] + " | " + board[9]);
         }
 
-        public void FillPosition(char userMove) {
+        public char[] FillPosition(char[] board,char userMove) {
             Console.WriteLine("Choose your desired index");
             int index = Convert.ToInt32((Console.ReadLine()));
             if (board[index] == ' ')
@@ -72,7 +74,7 @@ namespace TicTacToe
             else {
                 Console.WriteLine("Position is already filled");
             }
-            
+            return board;
         }
     }
 }
