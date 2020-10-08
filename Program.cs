@@ -8,8 +8,9 @@ namespace TicTacToe
         static void Main(string[] args)
         {
             TicTacToeGame ticTacToeGame = new TicTacToeGame();
-            char[] output = ticTacToeGame.CreateBoard();
-            ticTacToeGame.SelectMove();
+            char[] board = ticTacToeGame.CreateBoard();
+            char computerMove= ticTacToeGame.SelectMove();
+            ticTacToeGame.ShowBoard();
         }
     }
 
@@ -24,11 +25,15 @@ namespace TicTacToe
             return board;
         }
 
-        public void SelectMove()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public char SelectMove()
         {
-            char cpuMove;
-            Console.WriteLine("Select your move");
-            char userMove = Convert.ToChar(Console.ReadLine());
+            char cpuMove= ' ';
+            Console.WriteLine("Select your move X or O");
+            char userMove = Convert.ToChar(Console.ReadLine().ToUpper());
             if (userMove == 'X')
             {
                 cpuMove = 'O';
@@ -40,8 +45,14 @@ namespace TicTacToe
             else {
                 Console.WriteLine("Invalid move");
             }
+            return cpuMove;
         }
 
+        public void ShowBoard() {
+            Console.WriteLine("___||___||___");
+            Console.WriteLine("___||___||___");
+            Console.WriteLine("___||___||___");
+        }
 
     }
 }
