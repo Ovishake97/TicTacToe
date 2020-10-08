@@ -10,6 +10,7 @@ namespace TicTacToe
         {
             TicTacToeGame ticTacToeGame = new TicTacToeGame();
             char[] boardMoves = ticTacToeGame.CreateBoard();
+            ticTacToeGame.PlayerToss();
             char playerMove= ticTacToeGame.SelectMove();
             ticTacToeGame.ShowBoard(boardMoves);
            boardMoves= ticTacToeGame.FillPosition(boardMoves,playerMove);
@@ -19,6 +20,8 @@ namespace TicTacToe
 
     public class TicTacToeGame
     {
+        public const int IS_HEAD= 1;
+        public const int IS_TAIL= 2;
         public char[] board = new char[10];
         public char userMove= ' ';
         char cpuMove = ' ';
@@ -32,10 +35,22 @@ namespace TicTacToe
             return board;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        public void PlayerToss() {
+            Console.WriteLine("Choose Head=1 or Tail=2");
+            int toss = Convert.ToInt32(Console.ReadLine());
+            Random random = new Random();
+            int tossResult = random.Next(1, 3);
+            if (toss == IS_HEAD || toss == IS_TAIL) {
+                if (tossResult == toss)
+                {
+                    Console.WriteLine("User moves first");
+                }
+                else {
+                    Console.WriteLine("Computer moves first");
+                }
+            }
+            
+        }
         public char SelectMove()
         {
             
@@ -67,12 +82,16 @@ namespace TicTacToe
         public char[] FillPosition(char[] board,char userMove) {
             Console.WriteLine("Choose your desired index");
             int index = Convert.ToInt32((Console.ReadLine()));
-            if (board[index] == ' ')
+            if (board[index] >= 1 && board[index] < 9)
             {
-                board[index] = userMove;
-            }
-            else {
-                Console.WriteLine("Position is already filled");
+                if (board[index] == ' ')
+                {
+                    board[index] = userMove;
+                }
+                else
+                {
+                    Console.WriteLine("Position is already filled");
+                }
             }
             return board;
         }
