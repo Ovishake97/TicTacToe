@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -10,52 +11,71 @@ namespace TicTacToe
         {
             TicTacToeGame ticTacToeGame = new TicTacToeGame();
             char[] boardMoves = ticTacToeGame.CreateBoard();
-            ticTacToeGame.PlayerToss();
-            char playerMove= ticTacToeGame.SelectMove();
             ticTacToeGame.ShowBoard(boardMoves);
-           boardMoves= ticTacToeGame.FillPosition(boardMoves,playerMove);
-            ticTacToeGame.ShowBoard(boardMoves);
+            char playerMove = ticTacToeGame.SelectMove();
+            TicTacToeGame.Player player = ticTacToeGame.PlayerToss();
+        
         }
     }
 
     public class TicTacToeGame
     {
-        public const int IS_HEAD= 1;
-        public const int IS_TAIL= 2;
+        public const int IS_HEAD = 0;
+        public const int IS_TAIL = 1;
         public char[] board = new char[10];
-        public char userMove= ' ';
-        char cpuMove = ' ';
+        public char[] boardCopy = new char[10];
+        public int key = 0;
+        public char userMove = ' ';
+        public enum Player { USER,COMPUTER};
+
+        //Creating the board for the game
+
         public char[] CreateBoard()
         {
             for (int i = 1; i <= board.Length; i++) {
 
-                
-                board[i-1] =' ';
+
+                board[i - 1] = ' ';
             }
             return board;
         }
 
-        public void PlayerToss() {
-            Console.WriteLine("Choose Head=1 or Tail=2");
-            int toss = Convert.ToInt32(Console.ReadLine());
+        //Tossing and deciding who playes first
+
+        public Player PlayerToss()
+        {
+            Console.WriteLine("Wait for the toss results:");
             Random random = new Random();
-            int tossResult = random.Next(1, 3);
-            if (toss == IS_HEAD || toss == IS_TAIL) {
-                if (tossResult == toss)
-                {
-                    Console.WriteLine("User moves first");
-                }
-                else {
-                    Console.WriteLine("Computer moves first");
-                }
+            int toss = random.Next(0, 2);
+
+            if (toss == IS_HEAD)
+            {
+                Console.WriteLine("User moves first");
+                return Player.USER;
+
             }
-            
+            else
+            {
+                Console.WriteLine("Computer moves first");
+                return Player.COMPUTER;
+
+            }
         }
-        public char SelectMove()
+            
+
+        //Selecting move for the user
+            public char SelectMove()
         {
             
             Console.WriteLine("Select your move X or O");
-            userMove = Convert.ToChar(Console.ReadLine().ToUpper());
+            char userMove = Convert.ToChar(Console.ReadLine().ToUpper());
+            return userMove;
+        }
+
+        //Deciding move of the computer
+
+       public  char GetComputerMove(char userMove) {
+            char cpuMove = ' ';
             if (userMove == 'X')
             {
                 cpuMove = 'O';
@@ -64,38 +84,61 @@ namespace TicTacToe
             {
                 cpuMove = 'X';
             }
-            else {
-                Console.WriteLine("Invalid move");
-            }
-            return userMove;
+            return cpuMove;
         }
 
-        public void ShowBoard(char[] board) {
+        //Getting a copy of the gameboard
+        public char[] GetBoardCopy(char[] board) {
+            Array.Copy(board, 0, boardCopy, 0, 10);
+            return boardCopy;
+        }
+
+        //Showing the board
+
+        public void ShowBoard(char[] board)
+        {
             Console.WriteLine("___|___|___");
-            Console.WriteLine(" "+board[1]+" | " +board[2]+ " | " +board[3]);
+            Console.WriteLine(" " + board[1] + " | " + board[2] + " | " + board[3]);
             Console.WriteLine("___|___|___");
             Console.WriteLine(" " + board[4] + " | " + board[5] + " | " + board[6]);
             Console.WriteLine("___|___|___");
             Console.WriteLine(" " + board[7] + " | " + board[8] + " | " + board[9]);
         }
 
-        public char[] FillPosition(char[] board,char userMove) {
-            Console.WriteLine("Choose your desired index");
-            int index = Convert.ToInt32((Console.ReadLine()));
-            if (board[index] >= 1 && board[index] < 9)
-            {
-                if (board[index] == ' ')
-                {
-                    board[index] = userMove;
-                }
-                else
-                {
-                    Console.WriteLine("Position is already filled");
+        //Computer playing the game
+        public char[] ComputerPlays(char[] board, char cpuMove)
+        {
+            char move = GetComputerMove(userMove);
+            char[] boardNew = GetBoardCopy(board);
+            for (int i = 1; i < board.Length; i++) {
+                if (boardNew[i] != ' ') {
+                    boardNew[i] = move;
                 }
             }
-            return board;
+            return boardNew;
+            
         }
-    }
-}
 
+        //User playing the game
+        public char[] FillPosition(char[] board, char userMove)
+        {
+            char[] boardNew = GetBoardCopy(board);
+            Console.WriteLine("Choose your desired index from 1 to 9");
+            int index = Convert.ToInt32((Console.ReadLine()));
+            while (boardNew[index] != ' ')
+            {
+                board[index] = userMove;
+
+            }   
+            return boardNew;
+        }
+            
+        }
+
+
+
+    }
+    
+
+   
 
