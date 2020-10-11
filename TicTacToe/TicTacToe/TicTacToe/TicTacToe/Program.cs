@@ -42,6 +42,19 @@ namespace TicTacToe
                 else {
                     gameIsPlaying = false;
                 }
+
+                if (gameIsPlaying == false) {
+                    Console.WriteLine("Do you want to play again? Write yes or no");
+                    string answer = Console.ReadLine().ToLower();
+                    if (answer.Equals("yes"))
+                    {
+                        gameIsPlaying = true;
+                    }
+                    else {
+                        Console.WriteLine("Thank you for playing with us");
+                        Console.ReadKey();
+                    }
+                }
             }
 
         }
